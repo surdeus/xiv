@@ -1,0 +1,10 @@
+<$HOME/app/mk/inc/config
+PROGNAME = xiv
+VERSION = 0.2
+INCS = $X11INC
+LIBS = $X11LIB
+DEFS = -DVERSION=\"$VERSION\"
+LDFLAGS = $LD_STATIC_FLAG
+CFILES = main.c
+HFILES = arg.h
+
