@@ -1,5 +1,6 @@
 #!/bin/env rc
 
+argv0 = $0
 opt = ()
 while(~ $1 -*)
 	switch($1){
@@ -12,13 +13,45 @@ while(~ $1 -*)
 			shift
 	}
 
+
 files = $*
+if( test $#files -eq 0 )
+	files = *
+
+exts = `{2ff}
 fds = ()
-for(i in $files){
-	if(test ! -f $i)
-		echo $0: $1: no such file >[2=1]
-	if not
+fn addfile {
+	switch($1){
+	case *.^$exts
 		fds = ($fds '<{2ff '$i'}')
+	case *
+		echo $argv0: $1: extension is not recognized >[2=1]
+	}
 }
 
+fn addfiles {
+	for(i in $*)
+		addfile $i
+}
+
+for(i in $files){
+	s = 0
+	if(test ! -e $i){
+		echo $0: $1: no such file or directory >[2=1]
+		s = 1
+	}
+	if(test ! -r $i ){
+		echo $2: $1: permission denied >[2=1]
+		s = 1
+	}
+	if(test $s -eq 0){
+		if(test -f $i)
+			addfile $i
+		if(test -d $i)
+			addfiles `{goblin ls -r 10 $i | ftest -fr}
+	}
+}
+
+if(test $#fds -eq 0)
+	exit 1
 eval exec xiv -t xiv $opt $fds
