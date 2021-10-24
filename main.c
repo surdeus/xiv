@@ -45,7 +45,7 @@ static struct img *cimg;
 static size_t nimgs;
 static int viewmode = ASPECT;
 static char *wintitle = APP_NAME;
-static char *bgcolor = "#000000";
+static char *bgcolor = "#777777";
 static XImage *ximg = NULL;
 static Drawable xpix = 0;
 static Display *dpy = NULL;
